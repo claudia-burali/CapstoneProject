@@ -1,13 +1,20 @@
 package claudiaburali.capstoneproject.tools;
 
 
+import claudiaburali.capstoneproject.entities.User;
+import kong.unirest.core.HttpResponse;
+import kong.unirest.core.JsonNode;
+import kong.unirest.core.Unirest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 @Component
 public class MailgunSender {
 
     private String apiKey;
     private String domainName;
 
-    public MailgunSender(@Value("${mailgun.apikey}")String apiKey, @Value("${mailgun.domainname}")String domainName) {
+    public MailgunSender(@Value("${mailgun.apikey}") String apiKey, @Value("${mailgun.domainname}")String domainName) {
         this.apiKey = apiKey;
         this.domainName = domainName;
     }
