@@ -22,7 +22,7 @@ public class MailgunSender {
     public void sendRegistrationEmail(User recipient){
         HttpResponse<JsonNode> response = Unirest.post("https://api.mailgun.net/v3/"+ this.domainName + "/messages")
                 .basicAuth("api", this.apiKey)
-                .queryString("from", "riccardo.gulin@gmail.com")
+                .queryString("from", "claudia.floyd.98@gmail.com")
                 .queryString("to", recipient.getEmail())
                 .queryString("subject", "Registrazione completata con successo!")
                 .queryString("text", "Complimenti " + recipient.getName() + " per esserti registrato con successo")

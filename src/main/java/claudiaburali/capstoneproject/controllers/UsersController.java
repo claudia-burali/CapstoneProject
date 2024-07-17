@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -54,6 +56,12 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID userId) {
         this.usersService.findByIdAndDelete(userId);
+    }
+
+    @PostMapping("/{userId}/avatar")
+    public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
+
+        return this.usersService.uploadImage(image);
     }
 
 }

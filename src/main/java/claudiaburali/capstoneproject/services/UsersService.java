@@ -6,6 +6,8 @@ import claudiaburali.capstoneproject.exceptions.NotFoundException;
 import claudiaburali.capstoneproject.payloads.NewUserDTO;
 import claudiaburali.capstoneproject.repositories.UsersRepository;
 import claudiaburali.capstoneproject.tools.MailgunSender;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -26,6 +30,9 @@ public class UsersService {
 
     @Autowired
     private MailgunSender mailgunSender;
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Page<User> getUsers(int pageNumber, int pageSize, String sortBy) {
         if (pageSize > 100) pageSize = 100;
@@ -68,6 +75,10 @@ public class UsersService {
 
     public User findByEmail(String email){
         return usersRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato!"));
+    }
+
+    public String uploadImage(MultipartFile file) throws IOException {
+        return (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
     }
 
 }
