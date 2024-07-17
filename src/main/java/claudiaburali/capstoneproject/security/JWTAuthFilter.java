@@ -29,11 +29,11 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization"); // "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4MjkwNjksImV4cCI6MTcyMDQzMzg2OSwic3ViIjoiOTFkMTg2MGItZjE2Yy00MTYwLWIyYTYtODU2NWY0MzY5MTBiIn0.1hEDloV0FbYnw5U8mwg0CsIWLVos6qZSYPOCJUyhG8o"
+        String authHeader = request.getHeader("Authorization");
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) throw new UnauthorizedException("Per favore inserisci correttamente il token nell'header");
 
-        String accessToken = authHeader.substring(7); // "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4MjkwNjksImV4cCI6MTcyMDQzMzg2OSwic3ViIjoiOTFkMTg2MGItZjE2Yy00MTYwLWIyYTYtODU2NWY0MzY5MTBiIn0.1hEDloV0FbYnw5U8mwg0CsIWLVos6qZSYPOCJUyhG8o"
+        String accessToken = authHeader.substring(7);
 
         jwtTools.verifyToken(accessToken);
 

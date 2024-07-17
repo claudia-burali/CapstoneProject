@@ -1,6 +1,7 @@
 package claudiaburali.capstoneproject.controllers;
 
 import claudiaburali.capstoneproject.entities.User;
+import claudiaburali.capstoneproject.repositories.UsersRepository;
 import claudiaburali.capstoneproject.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,9 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private UsersRepository usersRepository;
+
     @GetMapping
     public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
         return this.usersService.getUsers(page, size, sortBy);
@@ -32,7 +36,7 @@ public class UsersController {
     @PutMapping("/me")
     public User updateProfile(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestBody User body){
         return this.usersService.findByIdAndUpdate(currentAuthenticatedUser.getId(), body);
-    }
+    } //AGGIUNGERE PATCH PER MODIFICA PASSWORD
 
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -60,8 +64,15 @@ public class UsersController {
 
     @PostMapping("/{userId}/avatar")
     public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
-
         return this.usersService.uploadImage(image);
     }
+
+   /*@PostMapping("/avatar")
+   public String uploadAvatar(@RequestParam("avatar") MultipartFile image, @AuthenticationPrincipal User currentAuthenticatedUser) throws IOException {
+       usersRepository.save();
+       User user =
+       usersService.findById(currentAuthenticatedUser.getId()).setAvatarURL(this.usersService.uploadImage(image));
+       return "Avatar caricato!";
+   }*/
 
 }
