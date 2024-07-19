@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +20,6 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 public class User implements UserDetails {
@@ -36,6 +35,9 @@ public class User implements UserDetails {
     private LocalDate singUpDate;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER) //cascade = CascadeType.ALL, orphanRemoval = true al posto di fetch
+    private List<Wallet> wallets = new ArrayList<>();
 
     public User(String name, String surname, String email, String password, LocalDate birthDate) {
         this.name = name;
