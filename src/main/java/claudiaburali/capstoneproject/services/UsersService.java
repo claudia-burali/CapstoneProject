@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -47,8 +48,9 @@ public class UsersService {
                 }
         );
 
-        User newUser = new User(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()));
+        User newUser = new User(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()), body.birthDate());
         newUser.setAvatarURL("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
+        newUser.setSingUpDate(LocalDate.now());
         User saved = usersRepository.save(newUser);
         mailgunSender.sendRegistrationEmail(saved);
         return saved;
@@ -77,8 +79,23 @@ public class UsersService {
         return usersRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato!"));
     }
 
-    public String uploadImage(MultipartFile file) throws IOException {
+    public String updatePassword(UUID userId, String password){
+        User found = this.findById(userId);
+        found.setPassword(password);
+        usersRepository.save(found);
+        return "Password modificata!";
+    }
+
+    /*public String uploadImage(MultipartFile file) throws IOException {
         return (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+    }*/
+
+    public String uploadImage(UUID userId, MultipartFile file) throws IOException {
+        User user = findById(userId);
+        String imgURL = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        user.setAvatarURL(imgURL);
+        usersRepository.save(user);
+        return "Immagine aggiunta!";
     }
 
 }
