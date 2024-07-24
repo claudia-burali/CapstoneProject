@@ -47,7 +47,6 @@ public class UsersService {
                     throw new BadRequestException("L'email " + body.email() + " è già in uso!");
                 }
         );
-
         User newUser = new User(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()), body.birthDate());
         newUser.setAvatarURL("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
         newUser.setSingUpDate(LocalDate.now());
