@@ -23,20 +23,18 @@ public class Transaction {
     private double amount;//quantità in BTC
     private LocalDate date;
     private String exchange;
-    private String address;
 
     @JsonIgnore
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
-    public Transaction(double volume, double value, double amount, LocalDate date, String exchange, String address) {
+    public Transaction(double volume, double value, double amount, LocalDate date, String exchange) {
         this.volume = volume;
         this.value = value;
         this.amount = amount;
         this.date = date;
         this.exchange = exchange;
-        this.address = address;
     }
 }
 

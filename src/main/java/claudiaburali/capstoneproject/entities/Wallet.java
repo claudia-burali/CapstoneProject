@@ -19,21 +19,18 @@ public class Wallet {
     @GeneratedValue
     private UUID id;
     private String name;
-    private double total_balance;
-    private double total_investment;
-    private double average_buyIn_position;
 
     @JsonIgnore
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "currency_pair_id")
     private CurrencyPair currencyPair;
 
     @JsonIgnore
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER) //cascade = CascadeType.ALL, orphanRemoval = true al posto di fetch
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
     private List<Transaction> transactions = new ArrayList<>();
 
     public Wallet(String name) {

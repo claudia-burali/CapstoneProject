@@ -15,9 +15,12 @@ public record NewUserDTO(
         @NotEmpty(message = "Il cognome è un dato obbligatorio!")
         @Size(min = 3, max = 40, message = "Il cognome deve essere compreso tra i 3 ed i 40 caratteri!")
         String surname,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") //attenzione al formato delle date!!
+        //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") per postman
         @NotNull(message = "La data di nascita è un campo obbligatorio!")
         LocalDate birthDate,
+        @NotEmpty(message = "Lo username è un dato obbligatorio!")
+        @Size(min = 3, max = 40, message = "Lo username deve essere compreso tra i 3 ed i 40 caratteri!")
+        String username,
         @NotEmpty(message = "L'email è un dato obbligatorio!")
         @Email(message = "L'email inserita non è valida!")
         String email,

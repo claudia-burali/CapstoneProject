@@ -76,10 +76,6 @@ public class UsersController {
         this.usersService.findByIdAndDelete(userId);
     }
 
-    /*@PostMapping("/{userId}/avatar")
-    public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
-        return this.usersService.uploadImage(image);
-    }*/
 
    @PatchMapping("/avatar")
    public String uploadAvatar(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException {

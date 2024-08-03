@@ -24,7 +24,7 @@ public class CurrencyPair {
     private String baseTicker;
     private String quoteTicker;
 
-    @OneToMany(mappedBy = "currencyPair", fetch = FetchType.EAGER) //cascade = CascadeType.ALL, orphanRemoval = true al posto di fetch
+    @OneToMany(mappedBy = "currencyPair", fetch = FetchType.EAGER)
     private List<Wallet> wallets = new ArrayList<>();
 
     public CurrencyPair(String name, String baseCurrency, String quoteCurrency, String baseTicker, String quoteTicker) {

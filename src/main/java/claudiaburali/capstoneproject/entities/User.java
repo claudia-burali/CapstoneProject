@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private UUID id;
     private String name;
     private String surname;
+    private String username;
     private String email;
     private String password;
     private LocalDate birthDate;
@@ -36,12 +37,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER) //cascade = CascadeType.ALL, orphanRemoval = true al posto di fetch
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Wallet> wallets = new ArrayList<>();
 
-    public User(String name, String surname, String email, String password, LocalDate birthDate) {
+    public User(String name, String surname, String username, String email, String password, LocalDate birthDate) {
         this.name = name;
         this.surname = surname;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
@@ -51,11 +53,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
     }
 
     @Override

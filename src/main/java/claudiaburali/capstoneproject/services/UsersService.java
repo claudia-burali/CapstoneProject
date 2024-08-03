@@ -47,7 +47,7 @@ public class UsersService {
                     throw new BadRequestException("L'email " + body.email() + " è già in uso!");
                 }
         );
-        User newUser = new User(body.name(), body.surname(), body.email(), bcrypt.encode(body.password()), body.birthDate());
+        User newUser = new User(body.name(), body.surname(), body.username(), body.email(), bcrypt.encode(body.password()), body.birthDate());
         newUser.setAvatarURL("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
         newUser.setSingUpDate(LocalDate.now());
         User saved = usersRepository.save(newUser);
@@ -85,9 +85,7 @@ public class UsersService {
         return "Password modificata!";
     }
 
-    /*public String uploadImage(MultipartFile file) throws IOException {
-        return (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-    }*/
+
 
     public String uploadImage(UUID userId, MultipartFile file) throws IOException {
         User user = findById(userId);
