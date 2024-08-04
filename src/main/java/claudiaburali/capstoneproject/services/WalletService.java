@@ -40,9 +40,11 @@ public class WalletService {
         return this.walletRepository.findById(walletId).orElseThrow(() -> new NotFoundException(walletId));
     }
 
-    public Wallet findByIdAndUpdate(UUID walletId, Wallet modifiedWallet) {
+    public Wallet findByIdAndUpdate(UUID walletId, NewWalletDTO modifiedWallet) {
         Wallet found = this.findById(walletId);
-        found.setName(modifiedWallet.getName());
+        found.setName(modifiedWallet.name());
+        CurrencyPair currencyPair = currencyPairService.getByName(modifiedWallet.currencyPairName());
+        found.setCurrencyPair(currencyPair);
         return this.walletRepository.save(found);
     }
 

@@ -1,5 +1,6 @@
 package claudiaburali.capstoneproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class CurrencyPair {
     private String baseTicker;
     private String quoteTicker;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "currencyPair", fetch = FetchType.EAGER)
     private List<Wallet> wallets = new ArrayList<>();
 

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/wallets")
@@ -30,6 +31,19 @@ public class WalletController {
             throw new BadRequestException(bindingResult.getAllErrors());
         }
         return walletService.saveWallet(wallet, user.getId());
+    }
+
+    @PatchMapping("/{walletId}")
+    public Wallet updateWallet(@RequestBody @Validated NewWalletDTO wallet, @AuthenticationPrincipal User user, @PathVariable UUID walletId, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.getAllErrors());
+        }
+        return walletService.findByIdAndUpdate(walletId, wallet);
+    }
+
+    @DeleteMapping("/{walletId}")
+    public void deleteWallet(@PathVariable UUID walletId) {
+        walletService.findByIdAndDelete(walletId);
     }
 }
 

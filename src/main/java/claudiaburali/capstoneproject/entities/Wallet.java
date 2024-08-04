@@ -20,7 +20,6 @@ public class Wallet {
     private UUID id;
     private String name;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "currency_pair_id")
     private CurrencyPair currencyPair;
