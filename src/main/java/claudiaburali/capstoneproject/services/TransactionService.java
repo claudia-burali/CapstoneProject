@@ -41,6 +41,7 @@ public class TransactionService {
         if (transactionDTO.exchange() != null) {
             transaction.setExchange(transactionDTO.exchange());
         }
+        transaction.setWallet(wallet);
         transactionRepository.save(transaction);
         wallet.getTransactions().add(transaction);
         walletRepository.save(wallet);
@@ -61,7 +62,7 @@ public class TransactionService {
     public void findByIdAndDelete(UUID walletId, UUID transactionId) {
         Wallet wallet = walletService.findById(walletId);
         Transaction transaction = findById(transactionId);
-        wallet.getTransactions().removeIf(transaction1 -> transaction1.getId() == walletId);
+        wallet.getTransactions().removeIf(transaction1 -> transaction1.getId() == transactionId);
         transactionRepository.delete(transaction);
     }
 }
