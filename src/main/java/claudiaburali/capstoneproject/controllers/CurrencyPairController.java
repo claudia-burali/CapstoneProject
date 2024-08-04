@@ -7,6 +7,7 @@ import claudiaburali.capstoneproject.services.CurrencyPairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CurrencyPairController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String createCurrencyPair(@RequestBody NewCurrencyPairDTO newCurrencyPairDTO, BindingResult bindingResult) {
+    public String createCurrencyPair(@RequestBody @Validated NewCurrencyPairDTO newCurrencyPairDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors());
         }

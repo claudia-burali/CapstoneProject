@@ -29,12 +29,10 @@ public class Transaction {
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
-    public Transaction(double volume, double value, double amount, LocalDate date, String exchange) {
+    public Transaction(double volume, double value, double amount) {
         this.volume = volume;
         this.value = value;
         this.amount = amount;
-        this.date = date;
-        this.exchange = exchange;
     }
 }
 
