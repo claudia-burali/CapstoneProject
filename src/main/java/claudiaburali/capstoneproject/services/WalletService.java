@@ -1,13 +1,16 @@
 package claudiaburali.capstoneproject.services;
 
 import claudiaburali.capstoneproject.entities.CurrencyPair;
+import claudiaburali.capstoneproject.entities.Transaction;
 import claudiaburali.capstoneproject.entities.User;
 import claudiaburali.capstoneproject.entities.Wallet;
 import claudiaburali.capstoneproject.exceptions.NotFoundException;
 import claudiaburali.capstoneproject.payloads.NewWalletDTO;
 import claudiaburali.capstoneproject.repositories.CurrencyPairRepository;
+import claudiaburali.capstoneproject.repositories.TransactionRepository;
 import claudiaburali.capstoneproject.repositories.UsersRepository;
 import claudiaburali.capstoneproject.repositories.WalletRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ public class WalletService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     public List<Wallet> getAllWalletsByUser(UUID id) {
         User user = userService.findById(id);
         return user.getWallets();
@@ -50,6 +56,9 @@ public class WalletService {
 
     public void findByIdAndDelete(UUID walletId) {
         Wallet found = this.findById(walletId);
+        for (Transaction transaction: found.getTransactions()) {
+            transactionRepository.delete(transaction);
+        }
         this.walletRepository.delete(found);
     }
 

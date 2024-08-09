@@ -8,6 +8,7 @@ import claudiaburali.capstoneproject.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +40,7 @@ public class UsersController {
         return currentAuthenticatedUser;
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public User updateProfile(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestBody User body){
         return this.usersService.findByIdAndUpdate(currentAuthenticatedUser.getId(), body);
     }
@@ -78,8 +80,13 @@ public class UsersController {
 
 
    @PatchMapping("/avatar")
-   public String uploadAvatar(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException {
-       return usersService.uploadImage(currentAuthenticatedUser.getId(), image);
+   public ResponseEntity<Object> uploadAvatar(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException {
+       try {
+           String response = usersService.uploadImage(currentAuthenticatedUser.getId(), image);
+           return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+       } catch (BadRequestException e) {
+           return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+       }
    }
 
 }

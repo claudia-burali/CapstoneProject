@@ -8,6 +8,7 @@ import claudiaburali.capstoneproject.repositories.UsersRepository;
 import claudiaburali.capstoneproject.tools.MailgunSender;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,14 +62,25 @@ public class UsersService {
 
     public User findByIdAndUpdate(UUID userId, User modifiedUser) {
         User found = this.findById(userId);
-        found.setName(modifiedUser.getName());
-        found.setSurname(modifiedUser.getSurname());
-        found.setEmail(modifiedUser.getEmail());
-        found.setPassword(modifiedUser.getPassword());
-        found.setAvatarURL("https://ui-avatars.com/api/?name=" + modifiedUser.getName() + "+" + modifiedUser.getSurname());
+        if (modifiedUser.getName() != null) {
+            found.setName(modifiedUser.getName());
+        }
+        if (modifiedUser.getSurname() != null) {
+            found.setSurname(modifiedUser.getSurname());
+        }
+        if (modifiedUser.getUsername() != null) {
+            found.setUsername(modifiedUser.getUsername());
+        }
+        if (modifiedUser.getEmail() != null) {
+            found.setEmail(modifiedUser.getEmail());
+        }
+        if (modifiedUser.getBirthDate() != null) {
+            found.setBirthDate(modifiedUser.getBirthDate());
+        }
         return this.usersRepository.save(found);
     }
 
+    @Transactional
     public void findByIdAndDelete(UUID userId) {
         User found = this.findById(userId);
         this.usersRepository.delete(found);
@@ -84,8 +96,6 @@ public class UsersService {
         usersRepository.save(found);
         return "Password modificata!";
     }
-
-
 
     public String uploadImage(UUID userId, MultipartFile file) throws IOException {
         User user = findById(userId);

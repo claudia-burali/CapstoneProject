@@ -6,11 +6,14 @@ import claudiaburali.capstoneproject.exceptions.BadRequestException;
 import claudiaburali.capstoneproject.payloads.NewWalletDTO;
 import claudiaburali.capstoneproject.services.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,8 +45,14 @@ public class WalletController {
     }
 
     @DeleteMapping("/{walletId}")
-    public void deleteWallet(@PathVariable UUID walletId) {
+    public ResponseEntity<Object> deleteWallet(@PathVariable UUID walletId) {
         walletService.findByIdAndDelete(walletId);
+        try {
+            String response = "Wallet eliminato correttamente!";
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 }
 

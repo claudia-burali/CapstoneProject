@@ -29,7 +29,7 @@ public class Wallet {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER/*, cascade = CascadeType.ALL, orphanRemoval = true*/)
     private List<Transaction> transactions = new ArrayList<>();
 
     public Wallet(String name) {
