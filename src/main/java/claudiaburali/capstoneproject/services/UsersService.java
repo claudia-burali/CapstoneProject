@@ -1,6 +1,7 @@
 package claudiaburali.capstoneproject.services;
 
 import claudiaburali.capstoneproject.entities.User;
+import claudiaburali.capstoneproject.entities.Wallet;
 import claudiaburali.capstoneproject.exceptions.BadRequestException;
 import claudiaburali.capstoneproject.exceptions.NotFoundException;
 import claudiaburali.capstoneproject.payloads.NewUserDTO;
@@ -35,6 +36,9 @@ public class UsersService {
 
     @Autowired
     private Cloudinary cloudinaryUploader;
+
+    @Autowired
+    private WalletService walletService;
 
     public Page<User> getUsers(int pageNumber, int pageSize, String sortBy) {
         if (pageSize > 100) pageSize = 100;
@@ -83,6 +87,9 @@ public class UsersService {
     @Transactional
     public void findByIdAndDelete(UUID userId) {
         User found = this.findById(userId);
+        for (Wallet wallet: found.getWallets()) {
+            walletService.findByIdAndDelete(wallet.getId());
+        }
         this.usersRepository.delete(found);
     }
 

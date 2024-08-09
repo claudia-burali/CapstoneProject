@@ -29,16 +29,13 @@ public class WalletService {
     private CurrencyPairRepository currencyPairRepository;
 
     @Autowired
-    private UsersService userService;
-
-    @Autowired
     private UsersRepository usersRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     public List<Wallet> getAllWalletsByUser(UUID id) {
-        User user = userService.findById(id);
+        User user = usersRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         return user.getWallets();
     }
 
@@ -63,7 +60,7 @@ public class WalletService {
     }
 
     public Wallet saveWallet(NewWalletDTO wallet, UUID id) {
-        User user = userService.findById(id);
+        User user = usersRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         Wallet wallet1 = new Wallet(wallet.name());
         CurrencyPair currencyPair = currencyPairService.getByName(wallet.currencyPairName());
         wallet1.setUser(user);
